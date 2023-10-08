@@ -1,25 +1,62 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { useState, useEffect } from "react";
 
 function App() {
+
+
+  const url = "http://localhost:8080/HRMS/api/common/getRolesList";
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Define the URL you want to fetch data from    
+
+    // Fetch data from the API
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((jsonData) => {
+        setData(jsonData); 
+        setIsLoading(false); 
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        setIsLoading(false);
+      });
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <div>
+          <center>
+          <h1>{data.message}</h1>          
+          {data.roleList.map((obj, index) => {
+            return (
+
+              <div style={{
+                width: "15em",
+                backgroundColor: "#35D841",
+                padding: 2,
+                borderRadius: 10,
+                marginBlock: 10,
+              }}>
+                {obj.roleName}
+
+              </div>
+            );
+          })}
+          </center>
+        </div>
+      )}
     </div>
-  );
+  );  
 }
 
 export default App;
