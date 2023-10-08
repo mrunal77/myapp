@@ -9,10 +9,7 @@ function App() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // Define the URL you want to fetch data from    
-
-    // Fetch data from the API
+  const getData = () => {
     fetch(url)
       .then((response) => {
         if (!response.ok) {
@@ -21,14 +18,19 @@ function App() {
         return response.json();
       })
       .then((jsonData) => {
-        setData(jsonData); 
-        setIsLoading(false); 
+        setData(jsonData);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
         setIsLoading(false);
       });
-  }, []);
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
+
   return (
     <div>
       {isLoading ? (
@@ -36,27 +38,27 @@ function App() {
       ) : (
         <div>
           <center>
-          <h1>{data.message}</h1>          
-          {data.roleList.map((obj, index) => {
-            return (
+            <h1>{data.message}</h1>
+            {data.roleList.map((obj, index) => {
+              return (
 
-              <div style={{
-                width: "15em",
-                backgroundColor: "#35D841",
-                padding: 2,
-                borderRadius: 10,
-                marginBlock: 10,
-              }}>
-                {obj.roleName}
+                <div style={{
+                  width: "15em",
+                  backgroundColor: "#35D841",
+                  padding: 2,
+                  borderRadius: 10,
+                  marginBlock: 10,
+                }}>
+                  {obj.roleName}
 
-              </div>
-            );
-          })}
+                </div>
+              );
+            })}
           </center>
         </div>
       )}
     </div>
-  );  
+  );
 }
 
 export default App;
